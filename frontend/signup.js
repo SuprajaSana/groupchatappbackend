@@ -19,7 +19,8 @@ async function postUserDetails(e) {
     );
     console.log(response)
     if (response.status === 201) {
-     alert("Successfully signed up")
+      alert("Successfully signed up")
+      window.location.href = "./login.html";
     } else {
       throw new Error("Failed to signup");
     }
