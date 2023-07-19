@@ -9,14 +9,6 @@ function isStringValid(s) {
   }
 }
 
-function isUserExists(x,y) {
-  if (UserDetails.findAll({ where: { email: x } }) || UserDetails.findAll({where:{phonenumber:y}}) ||(UserDetails.findAll({ where: { email: x } }) && UserDetails.findAll({where:{phonenumber:y}}))) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 const signUpUserDetails = async (req, res, next) => {
   const userName = req.body.userName;
   const email = req.body.email;
@@ -32,12 +24,6 @@ const signUpUserDetails = async (req, res, next) => {
     return res
       .status(400)
       .json({ success: false, message: "Required all fields" });
-  }
-
-  if (isUserExists(email,phonenumber)) {
-    return res
-      .status(400)
-      .json({ success: false, message: "User already exists" });
   }
 
   const saltrounds = 10;
@@ -58,8 +44,8 @@ const signUpUserDetails = async (req, res, next) => {
           userDetail: details,
         });
       })
-      .catch((err) => {
-        res.status(500).json({ success: true, message: err });
+        .catch((err) => {
+          res.status(500).json({ success: true, message: err });
       });
   });
 };

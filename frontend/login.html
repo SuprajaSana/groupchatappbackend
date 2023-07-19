@@ -1,29 +1,22 @@
 <!DOCTYPE html>
+
 <body>
-  <div
+     <div
     style="
       text-align: center;
       border: 2px solid grey;
       width: 40%;
-      height: 400px;
+      height: 300px;
       background-color: grey;
       margin-left: 30%;
       margin-top: 50px;
     "
   >
-    <h1>SignUp</h1>
+    <h1>Login</h1>
     <form onsubmit="postUserDetails(event)">
       <div style="margin-top: 20px">
-        <label style="margin-right: 20px">Enter Name</label>
-        <input type="text" name="name" id="name" required />
-      </div>
-      <div style="margin-top: 20px">
         <label style="margin-right: 20px">Enter Email</label>
-        <input type="email" name="email" id="email" required/>
-      </div>
-      <div style="margin-top: 20px">
-        <label style="margin-right: 20px">Enter Phonenumber</label>
-        <input type="text" name="phonenumber" id="phonenumber" required/>
+        <input type="email" name="email" id="email" required />
       </div>
       <div style="margin-top: 20px">
         <label style="margin-right: 10px">Enter Password</label>
@@ -32,14 +25,14 @@
       <button
         style="margin-top: 20px; width: 100px; height: 30px; font-weight: bold"
       >
-        Signup
+        Login
       </button>
-       <div style="margin-top: 20px">
-        <a href="./login.html">Already have an account?Login</a>
+      <div style="margin-top: 20px">
+        <a href="./signup.html">New User?Signup</a>
       </div>
     </form>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
-  <script src="./signup.js">
+  <script src="./login.js">
   </script>
 </body>

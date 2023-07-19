@@ -17,8 +17,9 @@ async function postUserDetails(e) {
       "http://localhost:4000/user/signup",
       obj
     );
+    console.log(response)
     if (response.status === 201) {
-     console.log("Successfully signedup")
+     alert("Successfully signed up")
     } else {
       throw new Error("Failed to signup");
     }
