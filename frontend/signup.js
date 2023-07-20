@@ -13,14 +13,12 @@ async function postUserDetails(e) {
   };
 
   try {
-    const response = await axios.post(
-      "http://localhost:4000/user/signup",
-      obj
-    );
-    console.log(response)
+    const response = await axios.post("http://localhost:4000/user/signup", obj);
     if (response.status === 201) {
-      alert("Successfully signed up")
+      alert("Successfully signed up");
       window.location.href = "./login.html";
+    } else if (response.status === 208) {
+      alert("User already exists PLEASE LOGIN");
     } else {
       throw new Error("Failed to signup");
     }

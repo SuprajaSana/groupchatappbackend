@@ -13,10 +13,7 @@ function isStringValid(s) {
 }
 
 const generateAccessToken = (id, name) => {
-  return jwt.sign(
-    { userDetailId: id, name: name},
-    process.env.TOKEN_SECRET
-  );
+  return jwt.sign({ userDetailId: id, name: name }, process.env.TOKEN_SECRET);
 };
 
 const signUpUserDetails = async (req, res, next) => {
@@ -41,22 +38,28 @@ const signUpUserDetails = async (req, res, next) => {
     if (err) {
       console.log(err);
     }
-    await UserDetails.create({
-      userName: userName,
-      email: email,
-      phonenumber: phonenumber,
-      password: hash,
-    })
-      .then((details) => {
-        res.status(201).json({
-          success: true,
-          message: "Successfully created new user",
-          userDetail: details,
-        });
-      })
-        .catch((err) => {
-          res.status(500).json({ success: true, message: err });
-      });
+    await UserDetails.findAll({ where: { email: email } }).then((details) => {
+      if (details[0]) {
+        res.status(208).json({ success: true, message: "User already exists" });
+      } else {
+        UserDetails.create({
+          userName: userName,
+          email: email,
+          phonenumber: phonenumber,
+          password: hash,
+        })
+          .then((details) => {
+            res.status(201).json({
+              success: true,
+              message: "Successfully created new user",
+              userDetail: details,
+            });
+          })
+          .catch((err) => {
+            res.status(500).json({ success: true, message: err });
+          });
+      }
+    });
   });
 };
 
@@ -82,10 +85,7 @@ const loginUserDetails = async (req, res, next) => {
               success: true,
               message: "User login successful",
               userDetail: result,
-              token: generateAccessToken(
-                details[0].id,
-                details[0].name,
-              ),
+              token: generateAccessToken(details[0].id, details[0].name),
             });
           } else {
             res
@@ -103,7 +103,7 @@ const loginUserDetails = async (req, res, next) => {
 };
 
 module.exports = {
-    signUpUserDetails,
-    loginUserDetails,
-    generateAccessToken
+  signUpUserDetails,
+  loginUserDetails,
+  generateAccessToken,
 };
