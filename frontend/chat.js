@@ -1,7 +1,8 @@
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     const response = await axios.get("http://localhost:4000/get/users");
-    showUsersListOnScreen(response.data.users);
+      showUsersListOnScreen(response.data.users);
+      showPastMessages();
   } catch (err) {
     console.log(err);
   }
@@ -35,9 +36,29 @@ async function sendMsgHandler(e) {
     } else {
       throw new Error("Failed to send message");
     }
-
     document.getElementById("msg").value = "";
   } catch (err) {
     document.body.innerHTML += `<div style="color:red;text-align:center;">${err.message}</div>`;
   }
+}
+
+async function showPastMessages() {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get("http://localhost:4000/get/messages", {
+      headers: { Authorization: token },
+    });
+
+    for (var i = 0; i < response.data.messages.length; i++) {
+      showChatOnScreen(response.data.messages[i].message);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+function showChatOnScreen(msg) {
+  const parentHTML = document.getElementById("showChat");
+  const childHTML = `<li>${msg}</li>`;
+  parentHTML.innerHTML = parentHTML.innerHTML+childHTML;
 }
