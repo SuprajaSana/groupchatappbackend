@@ -102,8 +102,21 @@ const loginUserDetails = async (req, res, next) => {
     });
 };
 
+const getUsersDetails = async (req, res, next) => {
+  await UserDetails.findAll()
+    .then((usersDetails) => {
+      res.status(200).json({
+        users: usersDetails,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+};
+
 module.exports = {
   signUpUserDetails,
   loginUserDetails,
   generateAccessToken,
+  getUsersDetails,
 };

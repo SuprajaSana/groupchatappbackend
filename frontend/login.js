@@ -12,7 +12,7 @@ async function postUserDetails(e) {
     const response = await axios.post("http://localhost:4000/user/login", obj);
     if (response.status === 200) {
       localStorage.setItem("token", response.data.token);
-      alert("Successfully Logged In")
+       window.location.href = "./chat.html";
     }
 
     document.getElementById("email").value = "";

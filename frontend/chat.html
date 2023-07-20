@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Page</title>
+  </head>
+  <body>
+    <h1 style="text-align: center">Chat APP</h1>
+    <div style="display: flex">
+      <div
+        style="
+          border: 2px solid grey;
+          border-radius: 10px;
+          height: 30%;
+          width: 20%;
+          margin-right: 20px;
+        "
+      >
+        <h2 style="text-align: center">Users</h2>
+        <div>
+          <ul id="listOfUsers"></ul>
+        </div>
+      </div>
+      <div
+        style="
+          border: 2px solid grey;
+          border-radius: 10px;
+          height: 30%;
+          width: 30%;
+          padding-bottom: 30%;
+        "
+      >
+        <h2 style="text-align: center">Chat</h2>
+        <input>
+        <button>Send</button>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <script src="./chat.js"></script>
+  </body>
+</html>
