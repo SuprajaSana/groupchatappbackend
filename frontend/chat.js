@@ -33,6 +33,7 @@ async function sendMsgHandler(e) {
     );
     if (response.status === 201) {
       console.log("Message Sent");
+      showChatOnScreen(response.data.messages.message)
     } else {
       throw new Error("Failed to send message");
     }
