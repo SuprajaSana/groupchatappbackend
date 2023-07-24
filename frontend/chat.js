@@ -1,12 +1,22 @@
+let newMsgArr = [];
+let arr = [];
+
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     const response = await axios.get("http://localhost:4000/get/users");
-      showUsersListOnScreen(response.data.users);
-      showPastMessages();
+    showUsersListOnScreen(response.data.users);
+    let locStoArr = localStorage.getItem("msgArr");
+    if (locStoArr) {
+      arr = JSON.parse(locStoArr);
+      for (var i = 0; i < arr.length; i++) {
+        showChatOnScreen(arr[i]);
+      }
+    }
   } catch (err) {
     console.log(err);
   }
 });
+
 function showUsersListOnScreen(users) {
   const parentNode = document.getElementById("listOfUsers");
   parentNode.innerHTML = "";
@@ -33,7 +43,12 @@ async function sendMsgHandler(e) {
     );
     if (response.status === 201) {
       console.log("Message Sent");
-      showChatOnScreen(response.data.messages.message)
+      if (arr.length >= 10) {
+        arr.shift();
+      }
+      arr.push(response.data.messages.message);
+      localStorage.setItem("msgArr", JSON.stringify(arr));
+      showPastMessages(response.data.messages.id);
     } else {
       throw new Error("Failed to send message");
     }
@@ -43,13 +58,16 @@ async function sendMsgHandler(e) {
   }
 }
 
-async function showPastMessages() {
+async function showPastMessages(id) {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.get("http://localhost:4000/get/messages", {
-      headers: { Authorization: token },
-    });
-
+    const response = await axios.get(
+      `http://localhost:4000/get/messages?lastmsgid=${id}`,
+      {
+        headers: { Authorization: token },
+      }
+    );
+    console.log(response.data);
     for (var i = 0; i < response.data.messages.length; i++) {
       showChatOnScreen(response.data.messages[i].message);
     }
@@ -60,6 +78,6 @@ async function showPastMessages() {
 
 function showChatOnScreen(msg) {
   const parentHTML = document.getElementById("showChat");
-  const childHTML = `<li>${msg}</li>`;
-  parentHTML.innerHTML = parentHTML.innerHTML+childHTML;
+  const childHTML = `<div>${msg}</div>`;
+  parentHTML.innerHTML = parentHTML.innerHTML + childHTML;
 }

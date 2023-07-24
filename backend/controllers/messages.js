@@ -22,8 +22,8 @@ exports.sendMessages = async (req, res, next) => {
 };
 
 exports.getMessages = async (req, res, next) => {
-  await req.user
-    .getMessages({})
+  const id=req.query.lastmsgid
+  await Messages.findAll({where:{id:id}})
     .then((messages) => {
       res.status(200).json({
         messages: messages,
@@ -33,3 +33,16 @@ exports.getMessages = async (req, res, next) => {
       res.status(500).json({ error: err });
     });
 };
+
+/* exports.getNewMsgs = async (req, res, next)=>{
+  const id = req.query.lastmsgid;
+  await Messages.findAll({where:{id:id}})
+    .then((messages) => {
+      res.status(200).json({
+        messages: messages,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+} */
