@@ -11,6 +11,12 @@ router.post("/send/messages", userAuthentication.authenticate, chatController.se
 router.get(
   "/get/messages",
   userAuthentication.authenticate,
+  chatController.getMessagesLoc
+);
+
+router.get(
+  "/get/grpmessages",
+  userAuthentication.authenticate,
   chatController.getMessages
 );
 

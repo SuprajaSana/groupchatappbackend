@@ -2,6 +2,8 @@ const UserDetails = require("../models/users");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const { Op } = require("sequelize");
+
 require("dotenv").config();
 
 function isStringValid(s) {
@@ -85,7 +87,8 @@ const loginUserDetails = async (req, res, next) => {
               success: true,
               message: "User login successful",
               userDetail: result,
-              token: generateAccessToken(details[0].id, details[0].name),
+              name:details[0].userName,
+              token: generateAccessToken(details[0].id, details[0].userName),
             });
           } else {
             res
@@ -103,8 +106,9 @@ const loginUserDetails = async (req, res, next) => {
 };
 
 const getUsersDetails = async (req, res, next) => {
-  await UserDetails.findAll()
+  await UserDetails.findAll({ where: { id: { [Op.not]: req.user.id } }})
     .then((usersDetails) => {
+      console.log(usersDetails)
       res.status(200).json({
         users: usersDetails,
       });
