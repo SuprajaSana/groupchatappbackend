@@ -11,9 +11,11 @@ async function postUserDetails(e) {
   try {
     const response = await axios.post("http://localhost:4000/user/login", obj);
     if (response.status === 200) {
+      localStorage.setItem("username", response.data.name);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("grpid", 0);
-      localStorage.setItem("msgArr",[])
+      localStorage.setItem("msgArr", []);
+       localStorage.setItem("grpby", 0);
       window.location.href = "./chat.html";
     }
 

@@ -12,4 +12,16 @@ router.post(
   usergrpController.addusertogrp
 );
 
+router.delete(
+  "/removeuser/grp/:id",
+  userAuthentication.authenticate,
+  usergrpController.deleteUserFromGrp
+);
+
+router.post(
+  "/makeuser/admin/:id",
+  userAuthentication.authenticate,
+  usergrpController.userChangeAsAdmin
+);
+
 module.exports = router;

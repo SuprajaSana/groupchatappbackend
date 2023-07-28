@@ -9,7 +9,8 @@ const UserGrp = sequelize.define("usergroup", {
     allowNull: false,
     primaryKey: true,
   },
-  name:Sequelize.STRING
+  name: Sequelize.STRING,
+  isAdmin:Sequelize.BOOLEAN
 });
 
 module.exports = UserGrp;
