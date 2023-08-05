@@ -18,7 +18,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     if (locStoArr) {
       arr = JSON.parse(locStoArr);
       for (var i = 0; i < arr.length; i++) {
-        showChatOnScreen(arr[i].sentBy, arr[i].msg);
+        showChatOnScreen(arr[i].sentBy, arr[i].msg,arr[i].fileURL);
       }
     }
     if (arr.length === 0) {
@@ -111,18 +111,17 @@ async function showUsersListOnScreen(users) {
 
 async function sendMsgHandler(e) {
   e.preventDefault();
-  const msg = e.target.msg.value;
-
-  const obj = {
-    msg,
-  };
+  const form=document.getElementById("myform")
+  const formData = new FormData(form)
+  formData.append("msg", document.getElementById("msg").value)
+  formData.append("files", document.getElementById("fileupload").files[0])
 
   try {
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("grpid");
     const response = await axios.post(
       `http://localhost:4000/send/messages?grpid=${id}`,
-      obj,
+      formData,
       { headers: { Authorization: token } }
     );
     if (response.status === 201) {
@@ -132,6 +131,7 @@ async function sendMsgHandler(e) {
       arr.push({
         sentBy: response.data.messages.sentBy,
         msg: response.data.messages.message,
+        fileURL: response.data.messages.fileURL,
       });
       localStorage.setItem("msgArr", JSON.stringify(arr));
       showPastMessages(response.data.messages.id);
@@ -157,7 +157,8 @@ async function showPastMessages(id) {
     for (var i = 0; i < response.data.messages.length; i++) {
       showChatOnScreen(
         response.data.messages[i].sentBy,
-        response.data.messages[i].message
+        response.data.messages[i].message,
+        response.data.messages[i].fileURL
       );
     }
   } catch (err) {
@@ -191,11 +192,13 @@ async function showmsgs(id) {
     for (var i = 0; i < response.data.messages.length; i++) {
       showChatOnScreen(
         response.data.messages[i].sentBy,
-        response.data.messages[i].message
+        response.data.messages[i].message,
+        response.data.messages[i].fileURL
       );
       arr.push({
         sentBy: response.data.messages[i].sentBy,
         msg: response.data.messages[i].message,
+        fileURL: response.data.messages[i].fileURL,
       });
     }
     localStorage.setItem("msgArr", JSON.stringify(arr));
@@ -204,10 +207,17 @@ async function showmsgs(id) {
   }
 }
 
-function showChatOnScreen(sentby, msg) {
+function showChatOnScreen(sentby, msg, img) {
   const parentHTML = document.getElementById("showChat");
   const childHTML = `<div>${sentby} - ${msg}</div>`;
-  parentHTML.innerHTML = parentHTML.innerHTML + childHTML;
+  if (img != "") {
+    const childHTML2 = `<div>${sentby}-
+    <img src=${img} alt=${sentby} height="200px" width="200px">
+    </div>`
+    parentHTML.innerHTML = parentHTML.innerHTML + childHTML + childHTML2;
+  } else {
+    parentHTML.innerHTML = parentHTML.innerHTML + childHTML;
+  }
 }
 
 function showGrpsOnScreen(grpid, grp) {

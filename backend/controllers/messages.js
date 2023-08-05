@@ -2,13 +2,20 @@ const User = require("../models/users");
 const Messages = require("../models/messages");
 
 exports.sendMessages = async (req, res, next) => {
-  const msg = req.body.msg;
+  const msg = req.body.msg[0];
   const grpId = req.query.grpid;
+  let fileurl;
+  if (req.files[0]) {
+     fileurl = req.files[0].path
+  } else {
+    fileurl=""
+  }
   await Messages.create({
     message: msg,
     groupId: grpId,
     userDetailId: req.user.id,
-    sentBy:req.user.userName
+    sentBy: req.user.userName,
+    fileURL:fileurl
   })
     .then((message) => {
       res.status(201).json({
@@ -19,8 +26,9 @@ exports.sendMessages = async (req, res, next) => {
     })
     .catch((err) => {
       res.status(500).json({ success: true, message: err });
-    });
+    }); 
 };
+
 
 exports.getMessagesLoc = async (req, res, next) => {
   const id = req.query.lastmsgid;
